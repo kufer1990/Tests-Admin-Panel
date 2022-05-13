@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-const userName = "jakub.ferdek@caterings.pl";
-const userPassword = "Ut3pa8c2@";
+const userName = "test@wp.pl";
+const userPassword = "Test1234@";
 let brandName = "Hot Dog DEV1";
 let zoneCategory = "Zaznacz wszystkie" //Zaznacz wszystkie / Warszawa2 / Reszta Polski
 let calendarDate = 18;
