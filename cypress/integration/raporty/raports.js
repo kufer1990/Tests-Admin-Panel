@@ -4,9 +4,7 @@ const userName = "jakub.ferdek@caterings.pl";
 const userPassword = "Ut3pa8c2@";
 let brandName = "Hot Dog DEV1";
 let zoneCategory = "Zaznacz wszystkie" //Zaznacz wszystkie / Warszawa2 / Reszta Polski
-let calendarDate = 15;
-// const monthArray = [`styczeń ${year}`,`luty ${year}`,`marzec ${year}`,`kwiecień ${year}`,`maj ${year}`,`czerwiec ${year}`,`lipiec ${year}`,`sierpień ${year}`,`listopad ${year}`,`grudzień ${year}`,`styczeń ${year}`,`styczeń ${year}`]
-
+let calendarDate = 18;
 
 describe('create raports stickers on dish', () => {
     it('login', () => {
@@ -28,28 +26,24 @@ describe('create raports stickers on dish', () => {
         cy.contains('label', zoneCategory).click();
         cy.get('body').click('right');
 
-
-
         cy.contains('label', 'Wybierz datę').parent('div').find('div').eq(1).click();
-        cy.contains('15').click()
+        cy.contains(calendarDate).click()
 
-        // cy.wait(5000);
         cy.get('button').contains('Generuj PDF').click()
-        // cy.get('button').contains('Generuj excel (XLSX)').click()
+      
 
-        // cy.verifyDownload('.pdf', {
-        //     contains: true
-        // });
+      
+        let year = new Date().getFullYear();
+        let month = new Date().getMonth() +1;
+        let days = new Date().getDate();
+        let hour = new Date().getHours();
+        let minutes= new Date().getMinutes();
+        let seccond = new Date().getSeconds();
 
-    // })
-
-    // it.only('time', () => {
-        // cy.verifyDownload('.pdf', { contains: true });
-        const year = new Date().getFullYear()
-        const month = new Date().getMonth() +1
-        const days = new Date().getDate()
-        const hour = new Date().getHours()
-        const minutes= new Date().getMinutes()
+        if(seccond >= 55){
+            minutes++;
+            cy.log(minutes)
+        }
 
         // jeżeli miesiąc jest mniejszy niż 10 to dodaje 0
         if (month < 10) {
@@ -68,7 +62,7 @@ describe('create raports stickers on dish', () => {
             }
         }
 
-  
-        // cy.verifyDownload('Naklejki_na_dania-2022-05-15_(2022-05-13_12.44).pdf');
+          // cy.get('button').contains('Generuj excel (XLSX)').click()
+
     })
 })
