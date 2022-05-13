@@ -7,11 +7,11 @@ let role="Super Administrator"; // nazwa roli
 let brand = "Hot Dog DEV1"; // nazwa marki
 let userEmail = 'test@wp.pl';
 let password = 'Test1234@';
-let urlAdress = 'https://admin.dev.caterings.nidev.pl/admin/recipes?selectedBrand=1';
+// let urlAdress = 'https://admin.dev.caterings.nidev.pl/admin/recipes?selectedBrand=1';
 
 describe('new person',()=>{
 it('login admin panel',()=>{
-    cy.visit(urlAdress);
+    cy.visit('/admin/recipes?selectedBrand=1');
     cy.get("#email").type('jakub.ferdek@caterings.pl');
     cy.get("#password").type('Ut3pa8c2@');
     cy.get('button[type=submit]').click();
