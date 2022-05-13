@@ -20,3 +20,17 @@ module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 }
+
+
+// const { isFileExist } = require('cy-verify-downloads');
+
+// module.exports = (on, config) => {
+//   on('task', { isFileExistm })
+// }
+
+const { isFileExist, findFiles } = require('cy-verify-downloads');
+
+module.exports = (on, config) => {
+  on('task', { isFileExist, findFiles })
+}
+

@@ -1,1 +1,9 @@
-{}
+{
+    "baseUrl": "https://admin.dev.caterings.nidev.pl",
+    "includeShadowDom": true,
+    "chromeWebSecurity": true,
+    "viewportHeight": 1080,
+    "viewportWidth": 1920,
+"downloadsFolder": "cypress/downloads",
+"trashAssetsBeforeRuns": true
+}
