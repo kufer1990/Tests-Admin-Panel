@@ -4,6 +4,6 @@
     "chromeWebSecurity": true,
     "viewportHeight": 1080,
     "viewportWidth": 1920,
-"downloadsFolder": "cypress/downloads",
-"trashAssetsBeforeRuns": true
+    "downloadsFolder": "cypress/downloads",
+    "trashAssetsBeforeRuns": true
 }
