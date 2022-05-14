@@ -4,7 +4,8 @@ const userName = "test@wp.pl";
 const userPassword = "Test1234@";
 let brandName = "Hot Dog DEV1";
 let zoneCategory = "Zaznacz wszystkie" //Zaznacz wszystkie / Warszawa2 / Reszta Polski
-let calendarDate = 11;
+let calendarDate = 9;
+let changeMonth = 0; // ilość miesięcy do przodu
 
 describe('create raports stickers on dish', () => {
     it('login', () => {
@@ -28,14 +29,24 @@ describe('create raports stickers on dish', () => {
 
         // show Calendar
         cy.contains('label', 'Wybierz datę').parent('div').find('div').eq(1).click();
+
+
+        for (let i = 1; i <= changeMonth; i++) {
+            cy.get('.rdtNext').then(like => {
+                cy.get(like[0]).click();
+
+            });
+        }
+
+        cy.wait(1000)
         // choice day in actual month
-     cy.get('.rdtDays>table>tbody>tr>td').not('.rdtOld').contains(calendarDate).click()
-       
-    //  generate pdf
+        cy.get('.rdtDays>table>tbody>tr>td').not('.rdtOld').contains(calendarDate).click()
+
+        //  generate pdf
         cy.get('button').contains('Generuj PDF').click()
 
 
-// create file name 
+        // create file name 
         let year = new Date().getFullYear();
         let month = new Date().getMonth() + 1;
         let days = new Date().getDate();
@@ -43,10 +54,16 @@ describe('create raports stickers on dish', () => {
         let newMinutes = new Date().getMinutes();
         let seccond = new Date().getSeconds();
         let minutes;
+        let monthAfterChange;
+        if (changeMonth > 0) {
+            monthAfterChange = month + changeMonth
+        }else{
+            monthAfterChange = month;
+        }
 
-        if(newMinutes<10){
+        if (newMinutes < 10) {
             minutes = "0" + newMinutes;
-        }else {
+        } else {
             minutes = newMinutes;
         }
 
@@ -62,48 +79,48 @@ describe('create raports stickers on dish', () => {
             //  jeżeli dzień miesiąca jest mniejszy niż 10 to dodaje zero
             if (days < 10) {
                 if (calendarDate < 10) {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${month}-0${calendarDate}_(${year}-0${month}-0${days}_${hour}.${minutes}).pdf`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${monthAfterChange}-0${calendarDate}_(${year}-0${month}-0${days}_${hour}.${minutes}).pdf`)
                 } else {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${month}-${calendarDate}_(${year}-0${month}-0${days}_${hour}.${minutes}).pdf`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${monthAfterChange}-${calendarDate}_(${year}-0${month}-0${days}_${hour}.${minutes}).pdf`)
                 }
             } else {
                 if (calendarDate < 10) {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${month}-0${calendarDate}_(${year}-0${month}-${days}_${hour}.${minutes}).pdf`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${monthAfterChange}-0${calendarDate}_(${year}-0${month}-${days}_${hour}.${minutes}).pdf`)
                 } else {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${month}-${calendarDate}_(${year}-0${month}-${days}_${hour}.${minutes}).pdf`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${monthAfterChange}-${calendarDate}_(${year}-0${month}-${days}_${hour}.${minutes}).pdf`)
                 }
             }
         } else {
             // jeżeli miesiąc to listopad lub grudzień
             if (days < 10) {
                 if (calendarDate < 10) {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-${month}-0${calendarDate}_(${year}-${month}-0${days}_${hour}.${minutes}).pdf`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-${monthAfterChange}-0${calendarDate}_(${year}-${month}-0${days}_${hour}.${minutes}).pdf`)
                 } else {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-${month}-${calendarDate}_(${year}-${month}-0${days}_${hour}.${minutes}).pdf`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-${monthAfterChange}-${calendarDate}_(${year}-${month}-0${days}_${hour}.${minutes}).pdf`)
                 }
             } else {
                 if (calendarDate < 10) {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-${month}-0${calendarDate}_(${year}-${month}-${days}_${hour}.${minutes}).pdf`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-${monthAfterChange}-0${calendarDate}_(${year}-${month}-${days}_${hour}.${minutes}).pdf`)
                 } else {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-${month}-${calendarDate}_(${year}-${month}-${days}_${hour}.${minutes}).pdf`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-${monthAfterChange}-${calendarDate}_(${year}-${month}-${days}_${hour}.${minutes}).pdf`)
                 }
             }
         }
 
-          cy.get('button').contains('Generuj excel (XLSX)').click()
+        cy.get('button').contains('Generuj excel (XLSX)').click()
         if (month < 10) {
             //  jeżeli dzień miesiąca jest mniejszy niż 10 to dodaje zero
             if (days < 10) {
                 if (calendarDate < 10) {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${month}-0${calendarDate}_(${year}-0${month}-0${days}_${hour}.${minutes}).xlsx`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${monthAfterChange}-0${calendarDate}_(${year}-0${month}-0${days}_${hour}.${minutes}).xlsx`)
                 } else {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${month}-${calendarDate}_(${year}-0${month}-0${days}_${hour}.${minutes}).xlsx`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${monthAfterChange}-${calendarDate}_(${year}-0${month}-0${days}_${hour}.${minutes}).xlsx`)
                 }
             } else {
                 if (calendarDate < 10) {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${month}-0${calendarDate}_(${year}-0${month}-${days}_${hour}.${minutes}).xlsx`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${monthAfterChange}-0${calendarDate}_(${year}-0${month}-${days}_${hour}.${minutes}).xlsx`)
                 } else {
-                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${month}-${calendarDate}_(${year}-0${month}-${days}_${hour}.${minutes}).xlsx`)
+                    cy.verifyDownload(`Naklejki_na_dania-${year}-0${monthAfterChange}-${calendarDate}_(${year}-0${month}-${days}_${hour}.${minutes}).xlsx`)
                 }
             }
         } else {
