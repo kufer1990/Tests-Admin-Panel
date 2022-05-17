@@ -57,24 +57,12 @@ describe('Recipe list', () => {
     it('verify download file', () => {
         cy.task('getDownload').then(fileName => {
             console.log('Downloaded file:', fileName);
+            const path = require("path");
+            const downloadsFolder = "cypress/downloads/";
+            cy.readFile(path.join(downloadsFolder + fileName)).should("exist");
+         
         });
 
     })
-
-    it('test',()=>{
-        // cy.verifyDownload('1xKarty-przepisów-2022-05-30-2022-06-04_(2022-05-17_11.27).pdf');
-
-
-
-        const path = require("path");
-    //    let fileNames = "1xKarty-przepisów-2022-05-30-2022-06-04_(2022-05-17_11.27).pdf";
-
-   const downloadsFolder = "cypress/downloads/";
-   cy.readFile(path.join(downloadsFolder + fileName)).should("exist");
-
-    })
-
-
-
-
+  
 })
