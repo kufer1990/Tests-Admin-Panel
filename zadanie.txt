@@ -1,0 +1,11 @@
+Lista zakupów,
+ Dla kierowcy, 
+ Karty przepisów, 
+ Karty dań, 
+ Etykiety na torby
+
+
+
+install date-fns
+import w teście 
+import { addDays, getDaysInMonth, isSameMonth } from "date-fns

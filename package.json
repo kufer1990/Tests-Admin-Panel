@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "cypress": "^9.6.1"
+    "cypress": "^9.6.1",
+    "date-fns": "^2.28.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz"
   },
   "devDependencies": {
     "cy-verify-downloads": "^0.1.6"
