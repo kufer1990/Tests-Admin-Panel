@@ -2,6 +2,7 @@
   "dependencies": {
     "cypress": "^9.6.1",
     "date-fns": "^2.28.0",
+    "rimraf": "^3.0.2",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz"
   },
   "devDependencies": {

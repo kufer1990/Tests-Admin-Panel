@@ -9,3 +9,6 @@ Lista zakupów,
 install date-fns
 import w teście 
 import { addDays, getDaysInMonth, isSameMonth } from "date-fns
+
+rimraff do sprawdzania plików
+npm install rimraf
