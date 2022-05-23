@@ -2,9 +2,9 @@
 
 const userName = "test@wp.pl";
 const userPassword = "Test1234@";
-// let actualDay = new Date().getDate();
-let actualDay = 30;
-let endDateCreateReport = actualDay + 4
+let actualDay = new Date().getDate();
+// let actualDay = 30;
+let endDateCreateReport = actualDay + 1
 
 describe('Recipe list', () => {
     beforeEach(() => {
@@ -13,7 +13,7 @@ describe('Recipe list', () => {
     afterEach(() => {
         cy.saveLocalStorage();
     });
-    
+
     it('login', () => {
         cy.visit('/admin/reports/recipe-cards');
         cy.get('#email').type(userName);
@@ -22,47 +22,48 @@ describe('Recipe list', () => {
     })
 
     it('choice brand', () => {
-        cy.get('.css-1hwfws3').eq(0).click();
+        cy.get('.input-select--brand').click();
         cy.get("#react-select-2-option-0").click();
+
     })
 
     it('choice paramarks', () => {
-        cy.get('.css-1hwfws3').eq(1).click();
+        cy.get('.input-select--subbrand').click();
         cy.get("#react-select-3-option-0").click();
         cy.get('body').click('right');
     })
 
     it('choice start day', () => {
-        cy.wait(1000);
-        cy.get('.rdt').eq(0).click();
-        cy.get('.rdtDays>table>tbody>tr>td').not('.rdtOld').contains(actualDay).click()
+        cy.get('.input-datetime--date-from').click();
+        cy.get('.input-datetime--date-from>.rdtPicker>.rdtDays>table>tbody>tr>td').not('.rdtOld').contains(actualDay).click()
     })
+
     it('change month', () => {
         console.log(endDateCreateReport)
         if (endDateCreateReport > 31) {
-            cy.get('.rdt').eq(1).click();
-            cy.get('.rdtNext').eq(1).click();
+            cy.get('.input-datetime--date-to').click();
+            cy.get('.input-datetime--date-to > .rdtPicker > .rdtDays > table > thead > :nth-child(1) > .rdtNext > span').click();
             endDateCreateReport = endDateCreateReport - actualDay
         }
     })
     it('choice end day', () => {
-        cy.get('.rdt').eq(1).click();
-        cy.get(`:nth-child(6) > .jss528 > .rdt > .rdtPicker > .rdtDays > table > tbody > tr > [data-value="${endDateCreateReport}"]`).not('.rdtOld').not('.rdtNew').click()
+        cy.get('.input-datetime--date-to').click();
+        cy.get(`.input-datetime--date-to > .rdtPicker > .rdtDays > table > tbody > tr > [data-value="${endDateCreateReport}"]`).not('.rdtOld').not('.rdtNew').click()
     })
 
-    it('generate report', () => {
-        cy.get('button[tabindex="0"][type=button]').contains('PDF').click();
+    it('generate report pdf', () => {
+        cy.get('.btn--generate-pdf').click();
     })
 
     it('verify download file', () => {
-        cy.task('agetDownload').then(fileName => {
+        cy.task('getDownload').then(fileName => {
             console.log('Downloaded file:', fileName);
             const path = require("path");
             const downloadsFolder = "cypress/downloads/";
             cy.readFile(path.join(downloadsFolder + fileName)).should("exist");
-         
+
         });
 
     })
-  
+
 })
