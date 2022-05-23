@@ -24,24 +24,24 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+const { default: verifyDownloadPdf } = require("./verifyDownloadPdf");
+const { default: verifyDownloadXlsx } = require("./verifyDownloadXlsx");
 
-require('cy-verify-downloads').addCustomCommand();
+require("cy-verify-downloads").addCustomCommand();
 
 let LOCAL_STORAGE_MEMORY = {};
 Cypress.Commands.add("saveLocalStorage", () => {
-    Object.keys(localStorage).forEach(key => {
-        LOCAL_STORAGE_MEMORY[key] = localStorage[key];
-    });
+  Object.keys(localStorage).forEach((key) => {
+    LOCAL_STORAGE_MEMORY[key] = localStorage[key];
+  });
 });
 
 Cypress.Commands.add("restoreLocalStorage", () => {
-    Object.keys(LOCAL_STORAGE_MEMORY).forEach(key => {
-        localStorage.setItem(key, LOCAL_STORAGE_MEMORY[key]);
-    });
+  Object.keys(LOCAL_STORAGE_MEMORY).forEach((key) => {
+    localStorage.setItem(key, LOCAL_STORAGE_MEMORY[key]);
+  });
 });
-// Cypress.Commands.add('isDownloaded', (selectorXPATH, fileName) => {
-//     //click on button
-//     cy.xpath(selectorXPATH).should('be.visible').click()
-//     //verify downloaded file
-//     cy.task('isExistPDF', fileName).should('equal', true)
-//   })
+
+// Cypress.Commands.add("verifyDownloadPdf", verifyDownloadPdf);
+
+// Cypress.Commands.add("verifyDownloadXlsx", verifyDownloadXlsx);
