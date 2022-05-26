@@ -1,8 +1,12 @@
 /// <reference types="cypress" />
+import * as XLSX from "xlsx";
+const userName = "test@wp.pl";
+const userPassword = "Test1234@";
 let actualDay = new Date().getDate();
+// let actualDay = 30;
 let endDateCreateReport = actualDay + 1;
 
-describe("Recipe list", () => {
+describe("dishes production", () => {
   beforeEach(() => {
     cy.restoreLocalStorage();
   });
@@ -11,34 +15,30 @@ describe("Recipe list", () => {
   });
 
   it("login", () => {
-    cy.fixture("loginDev.json")
+    cy.fixture("fitking.json")
       .as("visitOnInstances")
       .then((visitOnInstances) => {
-        cy.visit(`${visitOnInstances}/admin/reports/box-labels`);
+        cy.visit(
+          `${visitOnInstances["visitOnInstances"]}/admin/reports/dishes-to-production`
+        );
       });
-    cy.visit("/admin/reports/box-labels");
-    cy.fixture("loginDev.json")
+    cy.fixture("fitking.json")
       .as("login")
       .then((userName) => {
         cy.get("#email").type(userName["login"]);
       });
-    cy.fixture("loginDev.json")
+    cy.fixture("fitking.json")
       .as("paswword")
       .then((userPassword) => {
         cy.get("#password").type(userPassword["paswword"]);
       });
     cy.get('[type="submit"]').click();
+    cy.wait(4000);
   });
 
   it("choice brand", () => {
     cy.get(".input-select--brand").click();
     cy.get("#react-select-2-option-0").click();
-  });
-
-  it("choice paramarks", () => {
-    cy.get(".input-select--subbrand").click();
-    cy.get("#react-select-3-option-0").click();
-    cy.get("body").click("right");
   });
 
   it("choice start day", () => {
@@ -69,16 +69,23 @@ describe("Recipe list", () => {
       .click();
   });
 
-  it("generate report pdf", () => {
-    cy.get(".btn--generate-pdf").click();
-  });
-
-  it("verify download file", () => {
-    cy.task("getDownload").then((fileName) => {
-      console.log("Downloaded file:", fileName);
-      const path = require("path");
-      const downloadsFolder = "cypress/downloads/";
-      cy.readFile(path.join(downloadsFolder + fileName)).should("exist");
+  it("verify download xlsx", () => {
+    cy.intercept({
+      method: "GET",
+      url: "/reports/dishes-list*",
+    }).as("xslsReport");
+    cy.get(".btn--generate-xlsx").click();
+    cy.wait("@xslsReport").then(({ response }) => {
+      const data = new Uint8Array(response.body);
+      const workbook = XLSX.read(data, {
+        type: "array",
+      });
+      const first_sheet_name = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[first_sheet_name];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+        raw: true,
+      });
+      expect(jsonData).to.be.not.empty;
     });
   });
 });

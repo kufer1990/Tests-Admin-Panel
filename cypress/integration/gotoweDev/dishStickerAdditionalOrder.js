@@ -1,6 +1,10 @@
 /// <reference types="cypress" />
 import * as XLSX from "xlsx";
+const userName = "test@wp.pl";
+const userPassword = "Test1234@";
 let actualDay = new Date().getDate();
+// let actualDay = 30;
+let endDateCreateReport = actualDay + 1;
 
 describe("dishStickerAdditionalOrder", () => {
   beforeEach(() => {
@@ -14,9 +18,10 @@ describe("dishStickerAdditionalOrder", () => {
     cy.fixture("loginDev.json")
       .as("visitOnInstances")
       .then((visitOnInstances) => {
-        cy.visit(`${visitOnInstances}/admin/reports/box-labels`);
+        cy.visit(
+          `${visitOnInstances["visitOnInstances"]}/admin/reports/overprod-dish-stickers`
+        );
       });
-    cy.visit("/admin/reports/box-labels");
     cy.fixture("loginDev.json")
       .as("login")
       .then((userName) => {

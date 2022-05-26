@@ -1,6 +1,9 @@
 /// <reference types="cypress" />
 import * as XLSX from "xlsx";
+const userName = "test@wp.pl";
+const userPassword = "Test1234@";
 let actualDay = new Date().getDate();
+// let actualDay = 30;
 let endDateCreateReport = actualDay + 1;
 
 describe("Shopping List", () => {
@@ -15,9 +18,10 @@ describe("Shopping List", () => {
     cy.fixture("loginDev.json")
       .as("visitOnInstances")
       .then((visitOnInstances) => {
-        cy.visit(`${visitOnInstances}/admin/reports/box-labels`);
+        cy.visit(
+          `${visitOnInstances["visitOnInstances"]}/admin/reports/shopping`
+        );
       });
-    cy.visit("/admin/reports/box-labels");
     cy.fixture("loginDev.json")
       .as("login")
       .then((userName) => {
@@ -70,20 +74,12 @@ describe("Shopping List", () => {
       .click();
   });
 
-  it("generate report xlsx", () => {
-    cy.get(".btn--generate-xlsx").click();
-  });
-
   it("verify download xlsx", () => {
     cy.intercept({
       method: "GET",
       url: "/reports/shopping*",
     }).as("xslsReport");
-
-    // wait on response
-    // 1. convert ArrayBuffer to Uint8Array
-    // 2. convert Uint8Array by lib XSLX to workbox
-    // 3. donvert workbox to jsonData
+    cy.get(".btn--generate-xlsx").click();
     cy.wait("@xslsReport").then(({ response }) => {
       const data = new Uint8Array(response.body);
       const workbook = XLSX.read(data, {

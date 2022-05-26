@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 let actualDay = new Date().getDate();
+// let actualDay = 30;
 
 describe("choices checklist", () => {
   beforeEach(() => {
@@ -13,9 +14,10 @@ describe("choices checklist", () => {
     cy.fixture("loginDev.json")
       .as("visitOnInstances")
       .then((visitOnInstances) => {
-        cy.visit(`${visitOnInstances}/admin/reports/box-labels`);
+        cy.visit(
+          `${visitOnInstances["visitOnInstances"]}/admin/reports/checklist-altered-diets`
+        );
       });
-    cy.visit("/admin/reports/box-labels");
     cy.fixture("loginDev.json")
       .as("login")
       .then((userName) => {
