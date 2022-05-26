@@ -1,9 +1,6 @@
 /// <reference types="cypress" />
 import * as XLSX from "xlsx";
-const userName = "test@wp.pl";
-const userPassword = "Test1234@";
 let actualDay = new Date().getDate();
-// let actualDay = 30;
 let endDateCreateReport = actualDay + 1;
 
 describe("Recipe list", () => {
@@ -15,9 +12,22 @@ describe("Recipe list", () => {
   });
 
   it("login", () => {
-    cy.visit("/admin/reports/checklist-recipes");
-    cy.get("#email").type(userName);
-    cy.get("#password").type(userPassword);
+    cy.fixture("loginDev.json")
+      .as("visitOnInstances")
+      .then((visitOnInstances) => {
+        cy.visit(`${visitOnInstances}/admin/reports/box-labels`);
+      });
+    cy.visit("/admin/reports/box-labels");
+    cy.fixture("loginDev.json")
+      .as("login")
+      .then((userName) => {
+        cy.get("#email").type(userName["login"]);
+      });
+    cy.fixture("loginDev.json")
+      .as("paswword")
+      .then((userPassword) => {
+        cy.get("#password").type(userPassword["paswword"]);
+      });
     cy.get('[type="submit"]').click();
   });
 

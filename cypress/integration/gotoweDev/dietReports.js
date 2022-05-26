@@ -1,12 +1,9 @@
 /// <reference types="cypress" />
 import * as XLSX from "xlsx";
-const userName = "test@wp.pl";
-const userPassword = "Test1234@";
 let actualDay = new Date().getDate();
-// let actualDay = 30;
 let endDateCreateReport = actualDay + 1;
 
-describe("dishes production", () => {
+describe("diet reports", () => {
   beforeEach(() => {
     cy.restoreLocalStorage();
   });
@@ -15,9 +12,22 @@ describe("dishes production", () => {
   });
 
   it("login", () => {
-    cy.visit("/admin/reports/dishes-to-production");
-    cy.get("#email").type(userName);
-    cy.get("#password").type(userPassword);
+    cy.fixture("loginDev.json")
+      .as("visitOnInstances")
+      .then((visitOnInstances) => {
+        cy.visit(`${visitOnInstances}/admin/reports/box-labels`);
+      });
+    cy.visit("/admin/reports/box-labels");
+    cy.fixture("loginDev.json")
+      .as("login")
+      .then((userName) => {
+        cy.get("#email").type(userName["login"]);
+      });
+    cy.fixture("loginDev.json")
+      .as("paswword")
+      .then((userPassword) => {
+        cy.get("#password").type(userPassword["paswword"]);
+      });
     cy.get('[type="submit"]').click();
   });
 
@@ -54,10 +64,23 @@ describe("dishes production", () => {
       .click();
   });
 
+  it("generate report pdf", () => {
+    cy.get(".btn--generate-pdf").click();
+  });
+
+  it("verify download file pdf", () => {
+    cy.task("getDownload").then((fileName) => {
+      console.log("Downloaded file:", fileName);
+      const path = require("path");
+      const downloadsFolder = "cypress/downloads/";
+      cy.readFile(path.join(downloadsFolder + fileName)).should("exist");
+    });
+  });
+
   it("verify download xlsx", () => {
     cy.intercept({
       method: "GET",
-      url: "/reports/dishes-list*",
+      url: "/reports/active-diets*",
     }).as("xslsReport");
     cy.get(".btn--generate-xlsx").click();
     cy.wait("@xslsReport").then(({ response }) => {

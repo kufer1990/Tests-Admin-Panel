@@ -1,11 +1,9 @@
 /// <reference types="cypress" />
 import * as XLSX from "xlsx";
-const userName = "test@wp.pl";
-const userPassword = "Test1234@";
 let actualDay = new Date().getDate();
 let endDateCreateReport = actualDay + 1;
 
-describe("stickersRecipe", () => {
+describe("Shopping List", () => {
   beforeEach(() => {
     cy.restoreLocalStorage();
   });
@@ -14,15 +12,34 @@ describe("stickersRecipe", () => {
   });
 
   it("login", () => {
-    cy.visit("/admin/reports/stickers-recipe");
-    cy.get("#email").type(userName);
-    cy.get("#password").type(userPassword);
+    cy.fixture("loginDev.json")
+      .as("visitOnInstances")
+      .then((visitOnInstances) => {
+        cy.visit(`${visitOnInstances}/admin/reports/box-labels`);
+      });
+    cy.visit("/admin/reports/box-labels");
+    cy.fixture("loginDev.json")
+      .as("login")
+      .then((userName) => {
+        cy.get("#email").type(userName["login"]);
+      });
+    cy.fixture("loginDev.json")
+      .as("paswword")
+      .then((userPassword) => {
+        cy.get("#password").type(userPassword["paswword"]);
+      });
     cy.get('[type="submit"]').click();
   });
 
   it("choice brand", () => {
     cy.get(".input-select--brand").click();
     cy.get("#react-select-2-option-0").click();
+  });
+
+  it("choice paramarks", () => {
+    cy.get(".input-select--subbrand").click();
+    cy.get("#react-select-3-option-0").click();
+    cy.get("body").click("right");
   });
 
   it("choice start day", () => {
@@ -52,22 +69,31 @@ describe("stickersRecipe", () => {
       .not(".rdtNew")
       .click();
   });
+
+  it("generate report xlsx", () => {
+    cy.get(".btn--generate-xlsx").click();
+  });
+
   it("verify download xlsx", () => {
     cy.intercept({
       method: "GET",
-      url: "/reports/stickers-recipe*",
+      url: "/reports/shopping*",
     }).as("xslsReport");
-    cy.get(".btn--generate-xlsx").click();
+
+    // wait on response
+    // 1. convert ArrayBuffer to Uint8Array
+    // 2. convert Uint8Array by lib XSLX to workbox
+    // 3. donvert workbox to jsonData
     cy.wait("@xslsReport").then(({ response }) => {
       const data = new Uint8Array(response.body);
       const workbook = XLSX.read(data, {
         type: "array",
       });
+
       const first_sheet_name = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[first_sheet_name];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-        raw: true,
-      });
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+
       expect(jsonData).to.be.not.empty;
     });
   });

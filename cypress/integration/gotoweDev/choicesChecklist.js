@@ -1,9 +1,7 @@
 /// <reference types="cypress" />
-const userName = "test@wp.pl";
-const userPassword = "Test1234@";
 let actualDay = new Date().getDate();
 
-describe("forPackers", () => {
+describe("choices checklist", () => {
   beforeEach(() => {
     cy.restoreLocalStorage();
   });
@@ -12,9 +10,22 @@ describe("forPackers", () => {
   });
 
   it("login", () => {
-    cy.visit("/admin/reports/packers");
-    cy.get("#email").type(userName);
-    cy.get("#password").type(userPassword);
+    cy.fixture("loginDev.json")
+      .as("visitOnInstances")
+      .then((visitOnInstances) => {
+        cy.visit(`${visitOnInstances}/admin/reports/box-labels`);
+      });
+    cy.visit("/admin/reports/box-labels");
+    cy.fixture("loginDev.json")
+      .as("login")
+      .then((userName) => {
+        cy.get("#email").type(userName["login"]);
+      });
+    cy.fixture("loginDev.json")
+      .as("paswword")
+      .then((userPassword) => {
+        cy.get("#password").type(userPassword["paswword"]);
+      });
     cy.get('[type="submit"]').click();
   });
 

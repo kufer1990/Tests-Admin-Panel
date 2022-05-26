@@ -1,8 +1,8 @@
-Lista zakupów,
- Dla kierowcy, 
- Karty przepisów, 
- Karty dań, 
- Etykiety na torby
+Lista zakupów,v
+ Dla kierowcy, v
+ Karty przepisów, v
+ Karty dań, v
+ Etykiety na torby v
 
 
 

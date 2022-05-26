@@ -1,12 +1,8 @@
 /// <reference types="cypress" />
 import * as XLSX from "xlsx";
-const userName = "test@wp.pl";
-const userPassword = "Test1234@";
-let actualDay = new Date().getDate();
-// let actualDay = 30;
-let endDateCreateReport = actualDay + 1;
+let actualDay = new Date().getDate() + 1;
 
-describe("dishStickerAdditionalOrder", () => {
+describe("box labels", () => {
   beforeEach(() => {
     cy.restoreLocalStorage();
   });
@@ -15,9 +11,22 @@ describe("dishStickerAdditionalOrder", () => {
   });
 
   it("login", () => {
-    cy.visit("/admin/reports/overprod-dish-stickers");
-    cy.get("#email").type(userName);
-    cy.get("#password").type(userPassword);
+    cy.fixture("loginDev.json")
+      .as("visitOnInstances")
+      .then((visitOnInstances) => {
+        cy.visit(`${visitOnInstances}/admin/reports/box-labels`);
+      });
+    cy.visit("/admin/reports/box-labels");
+    cy.fixture("loginDev.json")
+      .as("login")
+      .then((userName) => {
+        cy.get("#email").type(userName["login"]);
+      });
+    cy.fixture("loginDev.json")
+      .as("paswword")
+      .then((userPassword) => {
+        cy.get("#password").type(userPassword["paswword"]);
+      });
     cy.get('[type="submit"]').click();
   });
 
@@ -37,9 +46,9 @@ describe("dishStickerAdditionalOrder", () => {
   it("verify download xlsx", () => {
     cy.intercept({
       method: "GET",
-      url: "/reports/overproduction-dish-stickers*",
+      url: "/reports/bag-stickers*",
     }).as("xslsReport");
-    cy.get(".btn--generate-xslx").click();
+    cy.get(".btn--generate-xlsx").click();
     // wait on response
     // 1. convert ArrayBuffer to Uint8Array
     // 2. convert Uint8Array by lib XSLX to workbox
@@ -49,9 +58,13 @@ describe("dishStickerAdditionalOrder", () => {
       const workbook = XLSX.read(data, {
         type: "array",
       });
+
       const first_sheet_name = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[first_sheet_name];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+        raw: true,
+      });
+
       expect(jsonData).to.be.not.empty;
     });
   });
