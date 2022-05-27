@@ -6,6 +6,7 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.18.7/xlsx-0.18.7.tgz"
   },
   "devDependencies": {
-    "cy-verify-downloads": "^0.1.6"
+    "cy-verify-downloads": "^0.1.6",
+    "cypress-mochawesome-reporter": "^3.1.0"
   }
 }
