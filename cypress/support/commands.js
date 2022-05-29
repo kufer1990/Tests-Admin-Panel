@@ -24,8 +24,7 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-const { default: verifyDownloadPdf } = require("./verifyDownloadPdf");
-const { default: verifyDownloadXlsx } = require("./verifyDownloadXlsx");
+import login from "./login";
 
 require("cy-verify-downloads").addCustomCommand();
 
@@ -42,6 +41,4 @@ Cypress.Commands.add("restoreLocalStorage", () => {
   });
 });
 
-// Cypress.Commands.add("verifyDownloadPdf", verifyDownloadPdf);
-
-// Cypress.Commands.add("verifyDownloadXlsx", verifyDownloadXlsx);
+Cypress.Commands.add("login", login);
