@@ -44,13 +44,22 @@ describe('create raports stickers on dish', () => {
         let month = new Date().getMonth() + 1;
         let days = new Date().getDate();
         let hour = new Date().getHours();
-        let minutes = new Date().getMinutes();
+        let newMinutes = new Date().getMinutes();
         let seccond = new Date().getSeconds();
+        let minutes;
+
+        if(newMinutes<10){
+            minutes = "0" + newMinutes;
+        }else {
+            minutes = newMinutes;
+        }
 
         if (seccond >= 50) {
             minutes++;
             cy.log(minutes)
         }
+
+       
         //jeszcze if jeżeli minuty są mniejsze niż 10
         // jeżeli miesiąc jest mniejszy niż 10 to dodaje 0
         if (month < 10) {
